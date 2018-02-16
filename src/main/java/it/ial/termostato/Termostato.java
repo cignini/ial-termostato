@@ -32,7 +32,34 @@ public class Termostato {
 		}
 	}
 
+	public void accendi() {
+		acceso = true;
+	}
+
+	public void spegni() {
+		acceso = false;
+	}
+
+	public boolean isAcceso() {
+		return acceso;
+	}
+
+	public int getTempMin() {
+		return tempMin;
+	}
+
+	public int getTempMax() {
+		return tempMax;
+	}
+
 	public void stampa() {
+		System.out.print("TERMOSTATO: ");
+		if (acceso) {
+			System.out.println("ACCESO");
+		} else {
+			System.out.println("SPENTO");
+		}
+		nuovaRiga();
 		for (int giorno = 0; giorno <= 7; giorno++) {
 			for (int ora = -1; ora <= 23; ora++) {
 				if (ora == -1) {
@@ -49,10 +76,14 @@ public class Termostato {
 				}
 				if (ora == 23) {
 					// rine riga
-					System.out.println();
+					nuovaRiga();
 				}
 			}
 		}
+	}
+
+	private void nuovaRiga() {
+		System.out.println();
 	}
 
 	private String toHour(int numero) {
