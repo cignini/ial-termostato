@@ -1,5 +1,15 @@
 package it.ial.termostato;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 public class Termostato {
 
 	private int[][] griglia = new int[7][24];
@@ -18,6 +28,38 @@ public class Termostato {
 		this.tempMin = tempMin;
 		this.tempMax = tempMax;
 		inizializza((tempMin + tempMax) / 2);
+	}
+
+	public void esportaInExcel() throws IOException {
+		Workbook wb = new HSSFWorkbook();
+
+		Sheet sheet = wb.createSheet("termostato");
+		for (int giorno = 0; giorno <= 7; giorno++) {
+			Row row = sheet.createRow(giorno);
+			for (int ora = -1; ora <= 23; ora++) {
+				Cell cell = row.createCell(ora + 1);
+				if (ora == -1) {
+					// prima colonna
+					cell.setCellValue(toGiorno(giorno));
+				} else {
+					if (giorno == 0) {
+						// prima riga
+						cell.setCellValue(toHour(ora));
+					} else {
+						// righe interne
+						cell.setCellValue(toTemp(griglia[giorno - 1][ora]));
+					}
+				}
+			}
+		}
+
+		String percorso = "src/main/resources/termostato.xls";
+		FileOutputStream fileOut = new FileOutputStream(percorso);
+		wb.write(fileOut);
+		fileOut.close();
+
+		nuovaRiga();
+		System.out.println("TERMOSTATO ESPORTATO IN: " + percorso);
 	}
 
 	public void setTemperatura(int temp, int giorno, int dalle, int alle) {
@@ -53,6 +95,7 @@ public class Termostato {
 	}
 
 	public void stampa() {
+		nuovaRiga();
 		System.out.print("TERMOSTATO: ");
 		if (acceso) {
 			System.out.println("ACCESO");
