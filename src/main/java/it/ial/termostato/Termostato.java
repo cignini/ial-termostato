@@ -1,6 +1,5 @@
 package it.ial.termostato;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -12,44 +11,42 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class Termostato {
 
-	private int[][] griglia = new int[7][24];
+	private Ora[] ore = new Ora[24];
+	private Giorno[] giorni = new Giorno[7];
 
-	private int tempMin = 8;
+	private Temperatura tempMin = new Temperatura(8);
 
-	private int tempMax = 28;
+	private Temperatura tempMax = new Temperatura(28);
 
 	private boolean acceso;
 
 	public Termostato() {
-		inizializza((tempMin + tempMax) / 2);
+		inizializza((tempMin.plus(tempMax).div(2)));
 	}
 
 	public Termostato(int tempMin, int tempMax) {
-		this.tempMin = tempMin;
-		this.tempMax = tempMax;
-		inizializza((tempMin + tempMax) / 2);
+		this.tempMin = new Temperatura(tempMin);
+		this.tempMax = new Temperatura(tempMax);
+		inizializza((this.tempMin.plus(this.tempMax).div(2)));
 	}
 
 	public void esportaInExcel() throws IOException {
 		Workbook wb = new HSSFWorkbook();
 
 		Sheet sheet = wb.createSheet("termostato");
-		for (int giorno = 0; giorno <= 7; giorno++) {
-			Row row = sheet.createRow(giorno);
-			for (int ora = -1; ora <= 23; ora++) {
-				Cell cell = row.createCell(ora + 1);
-				if (ora == -1) {
-					// prima colonna
-					cell.setCellValue(toGiorno(giorno));
-				} else {
-					if (giorno == 0) {
-						// prima riga
-						cell.setCellValue(toHour(ora));
-					} else {
-						// righe interne
-						cell.setCellValue(toTemp(griglia[giorno - 1][ora]));
-					}
-				}
+		Row row = sheet.createRow(0);
+		for (Ora ora : ore) {
+			Cell cell = row.createCell(ora.getOraDelGiorno() + 1);
+			cell.setCellValue(ora.getOraDelGiorno());
+		}
+		for (Giorno giorno : giorni) {
+			row = sheet.createRow(giorno.getGiornoDellaSettimana());
+			Cell cell = row.createCell(0);
+			cell.setCellValue(giorno.stampaGiorno());
+			for (Ora ora : ore) {
+				Temperatura temperatura = giorno.alleOre(ora);
+				cell = row.createCell(ora.getOraDelGiorno() + 1);
+				cell.setCellValue(temperatura.getGradi());
 			}
 		}
 
@@ -62,15 +59,32 @@ public class Termostato {
 		System.out.println("TERMOSTATO ESPORTATO IN: " + percorso);
 	}
 
-	public void setTemperatura(int temp, int giorno, int dalle, int alle) {
-		for (int ora = dalle; ora <= alle; ora++) {
-			griglia[giorno - 1][ora] = temp;
+	public void regolaTemperaturaTemperatura(int temp, int numGiorno, int dalle, int alle) {
+		for (int numOra = dalle; numOra <= alle; numOra++) {
+			giorno(numGiorno).regolaTemperatura(ora(numOra), temp);
 		}
 	}
 
-	private void inizializza(int temp) {
-		for (int giorno = 1; giorno <= 7; giorno++) {
-			setTemperatura(temp, giorno, 0, 23);
+	private Ora ora(int valore) {
+		if (valore < 0 || valore > 23) {
+			throw new IllegalArgumentException("le ore vanno da 0 a 23");
+		}
+		return ore[valore];
+	}
+
+	private Giorno giorno(int valore) {
+		if (valore < 1 || valore > 7) {
+			throw new IllegalArgumentException("i giorni vanno da 0 a 23");
+		}
+		return giorni[valore - 1];
+	}
+
+	private void inizializza(Temperatura temp) {
+		for (int giorno = 0; giorno < 7; giorno++) {
+			giorni[giorno] = new Giorno(giorno + 1, temp);
+		}
+		for (int ora = 0; ora < ore.length; ora++) {
+			ore[ora] = new Ora(ora);
 		}
 	}
 
@@ -86,11 +100,11 @@ public class Termostato {
 		return acceso;
 	}
 
-	public int getTempMin() {
+	public Temperatura getTempMin() {
 		return tempMin;
 	}
 
-	public int getTempMax() {
+	public Temperatura getTempMax() {
 		return tempMax;
 	}
 
@@ -103,25 +117,15 @@ public class Termostato {
 			System.out.println("SPENTO");
 		}
 		nuovaRiga();
-		for (int giorno = 0; giorno <= 7; giorno++) {
-			for (int ora = -1; ora <= 23; ora++) {
-				if (ora == -1) {
-					// prima colonna
-					System.out.print(toGiorno(giorno) + " | ");
-				} else {
-					if (giorno == 0) {
-						// prima riga
-						System.out.print(toHour(ora) + " | ");
-					} else {
-						// righe interne
-						System.out.print(toTemp(griglia[giorno - 1][ora]) + " | ");
-					}
-				}
-				if (ora == 23) {
-					// rine riga
-					nuovaRiga();
-				}
-			}
+		System.out.print("   ");
+		for (Ora ora : ore) {
+			System.out.print("| ");
+			System.out.print(ora.stampa());
+		}
+		System.out.println(" |");
+		for (Giorno giorno : giorni) {
+			System.out.print(giorno.stampa("| "));
+			System.out.println(" |");
 		}
 	}
 
@@ -129,40 +133,4 @@ public class Termostato {
 		System.out.println();
 	}
 
-	private String toHour(int numero) {
-		if (numero <= 9) {
-			return " " + numero + "h";
-		} else {
-			return "" + numero + "h";
-		}
-	}
-
-	private String toTemp(int numero) {
-		if (numero <= 9) {
-			return " " + numero + "°";
-		} else {
-			return "" + numero + "°";
-		}
-	}
-
-	private String toGiorno(int giorno) {
-		switch (giorno) {
-		case 1:
-			return "lun";
-		case 2:
-			return "mar";
-		case 3:
-			return "mer";
-		case 4:
-			return "gio";
-		case 5:
-			return "ven";
-		case 6:
-			return "sab";
-		case 7:
-			return "dom";
-		default:
-			return "   ";
-		}
-	}
 }
