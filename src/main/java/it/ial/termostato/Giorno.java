@@ -35,7 +35,7 @@ public class Giorno extends Cella {
 
 	public String stampaConTemperature(String separatore) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(toGiorno(giornoDellaSettimana));
+		buffer.append(stampa());
 		for (Temperatura temperatura : temperature) {
 			buffer.append(separatore);
 			buffer.append(temperatura.stampa());
@@ -43,8 +43,9 @@ public class Giorno extends Cella {
 		return buffer.toString();
 	}
 
-	private String toGiorno(int giorno) {
-		switch (giorno) {
+	@Override
+	public String stampa() {
+		switch (giornoDellaSettimana) {
 		case 1:
 			return "lun";
 		case 2:
@@ -60,12 +61,7 @@ public class Giorno extends Cella {
 		case 7:
 			return "dom";
 		default:
-			return "   ";
+			throw new IllegalArgumentException("giorno della settimana non valido: " + giornoDellaSettimana);
 		}
-	}
-
-	@Override
-	public String stampa() {
-		return toGiorno(giornoDellaSettimana);
 	}
 }
