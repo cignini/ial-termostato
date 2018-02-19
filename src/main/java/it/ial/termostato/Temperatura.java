@@ -8,12 +8,8 @@ public class Temperatura extends Cella {
 		this.gradi = gradi;
 	}
 
-	public Temperatura setGradi(int gradi) {
-		if (this.gradi==gradi) {
-			return this;
-		}else {
-			return new Temperatura(gradi);
-		}
+	public void setGradi(int gradi) {
+		this.gradi = gradi;
 	}
 
 	public int getGradi() {

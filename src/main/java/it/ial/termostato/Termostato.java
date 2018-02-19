@@ -21,13 +21,13 @@ public class Termostato {
 	private boolean acceso;
 
 	public Termostato() {
-		inizializza((tempMin.plus(tempMax).div(2)));
+		inizializza();
 	}
 
 	public Termostato(int tempMin, int tempMax) {
 		this.tempMin = new Temperatura(tempMin);
 		this.tempMax = new Temperatura(tempMax);
-		inizializza((this.tempMin.plus(this.tempMax).div(2)));
+		inizializza();
 	}
 
 	public void esportaInExcel() throws IOException {
@@ -79,9 +79,10 @@ public class Termostato {
 		return giorni[valore - 1];
 	}
 
-	private void inizializza(Temperatura temp) {
+	private void inizializza() {
+		int gradi = tempMin.plus(tempMax).div(2).getGradi();
 		for (int giorno = 0; giorno < 7; giorno++) {
-			giorni[giorno] = new Giorno(giorno + 1, temp);
+			giorni[giorno] = new Giorno(giorno + 1, gradi);
 		}
 		for (int ora = 0; ora < ore.length; ora++) {
 			ore[ora] = new Ora(ora);
@@ -106,6 +107,14 @@ public class Termostato {
 
 	public Temperatura getTempMax() {
 		return tempMax;
+	}
+
+	public Temperatura getTempMedia() {
+		Temperatura media = new Temperatura(0);
+		for (Giorno giorno : giorni) {
+			media = media.plus(giorno.getTempMedia());
+		}
+		return media.div(giorni.length);
 	}
 
 	public void stampa() {

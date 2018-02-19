@@ -6,11 +6,19 @@ public class Giorno extends Cella {
 
 	private Temperatura[] temperature = new Temperatura[24];
 
-	public Giorno(int giornoDellaSettimana, Temperatura temperaturaPredefinita) {
+	public Giorno(int giornoDellaSettimana, int gradi) {
 		this.giornoDellaSettimana = giornoDellaSettimana;
 		for (int ora = 0; ora < temperature.length; ora++) {
-			temperature[ora] = temperaturaPredefinita;
+			temperature[ora] = new Temperatura(gradi);
 		}
+	}
+
+	public Temperatura getTempMedia() {
+		Temperatura media = new Temperatura(0);
+		for (Temperatura t : temperature) {
+			media = media.plus(t);
+		}
+		return media.div(temperature.length);
 	}
 
 	public int getGiornoDellaSettimana() {
