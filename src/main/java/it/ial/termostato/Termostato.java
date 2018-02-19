@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -42,7 +43,7 @@ public class Termostato {
 		for (Giorno giorno : giorni) {
 			row = sheet.createRow(giorno.getGiornoDellaSettimana());
 			Cell cell = row.createCell(0);
-			cell.setCellValue(giorno.stampaGiorno());
+			cell.setCellValue(giorno.stampa());
 			for (Ora ora : ore) {
 				Temperatura temperatura = giorno.alleOre(ora);
 				cell = row.createCell(ora.getOraDelGiorno() + 1);
@@ -133,7 +134,7 @@ public class Termostato {
 		}
 		System.out.println(" |");
 		for (Giorno giorno : giorni) {
-			System.out.print(giorno.stampa("| "));
+			System.out.print(giorno.stampaConTemperature("| "));
 			System.out.println(" |");
 		}
 	}

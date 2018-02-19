@@ -33,7 +33,7 @@ public class Giorno extends Cella {
 		alleOre(ora).setGradi(gradi);
 	}
 
-	public String stampa(String separatore) {
+	public String stampaConTemperature(String separatore) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(toGiorno(giornoDellaSettimana));
 		for (Temperatura temperatura : temperature) {
@@ -64,7 +64,8 @@ public class Giorno extends Cella {
 		}
 	}
 
-	public String stampaGiorno() {
+	@Override
+	public String stampa() {
 		return toGiorno(giornoDellaSettimana);
 	}
 }

@@ -1,4 +1,6 @@
 package it.ial.termostato;
 
-public class Cella {
+public abstract class Cella {
+
+	public abstract String stampa();
 }
