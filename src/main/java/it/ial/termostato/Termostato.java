@@ -21,13 +21,16 @@ public class Termostato {
 	private boolean acceso;
 
 	public Termostato() {
-		inizializza();
+		azzera();
 	}
 
 	public Termostato(int tempMin, int tempMax) {
+		if (tempMax <= tempMin || tempMin < 0) {
+			throw new IllegalArgumentException("temperature inserite non valide");
+		}
 		this.tempMin = new Temperatura(tempMin);
 		this.tempMax = new Temperatura(tempMax);
-		inizializza();
+		azzera();
 	}
 
 	public void esportaInExcel() throws IOException {
@@ -60,6 +63,9 @@ public class Termostato {
 	}
 
 	public void regolaTemperatura(int temp, int numGiorno, int dalle, int alle) {
+		if (temp < tempMin.getGradi() || temp > tempMax.getGradi()) {
+			throw new IllegalArgumentException("temperatura non valida");
+		}
 		for (int numOra = dalle; numOra <= alle; numOra++) {
 			giorno(numGiorno).regolaTemperatura(ora(numOra), temp);
 		}
@@ -79,7 +85,7 @@ public class Termostato {
 		return giorni[valore - 1];
 	}
 
-	private void inizializza() {
+	public void azzera() {
 		int gradi = tempMin.plus(tempMax).div(2).getGradi();
 		for (int giorno = 0; giorno < 7; giorno++) {
 			giorni[giorno] = new Giorno(giorno + 1, gradi);
