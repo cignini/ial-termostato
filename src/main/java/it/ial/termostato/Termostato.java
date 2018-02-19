@@ -59,7 +59,7 @@ public class Termostato {
 		System.out.println("TERMOSTATO ESPORTATO IN: " + percorso);
 	}
 
-	public void regolaTemperaturaTemperatura(int temp, int numGiorno, int dalle, int alle) {
+	public void regolaTemperatura(int temp, int numGiorno, int dalle, int alle) {
 		for (int numOra = dalle; numOra <= alle; numOra++) {
 			giorno(numGiorno).regolaTemperatura(ora(numOra), temp);
 		}
