@@ -17,7 +17,9 @@ Esportazione della griglia a video e su file Excel tramite la libreria HSSF.
 4. documentazione HSSF: https://poi.apache.org/spreadsheet/quick-guide.html
 5. dipendenza maven HSSF: https://mvnrepository.com/artifact/org.apache.poi/poi/3.17
 6. nel pom.xml
-  - aggiungere dopo ```...</version>```
+  - aggiungere dopo 
+  ```...</version>``` 
+  il testo
   ```<dependencies></dependencies>```
   - dentro copiarci 
  ```
