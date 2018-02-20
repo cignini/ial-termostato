@@ -1,5 +1,15 @@
 package it.ial.termostato;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 public class Termostato {
 
 	private int[][] griglia = new int[7][24];
@@ -18,6 +28,28 @@ public class Termostato {
 		this.tempMin = tempMin;
 		this.tempMax = tempMax;
 		inizializza((tempMin + tempMax) / 2);
+	}
+	
+	public void esportaInExcel() throws IOException {
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("termostato");
+	
+		
+		
+		FileOutputStream fs = new FileOutputStream("src/test/resources/termostato.xls");
+		wb.write(fs);
+		fs.close();
+	}
+
+	public void esportaInExcel2() throws IOException {
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("termostato");
+		Row row = sheet.createRow(0);
+		Cell cell = row.createCell(0);
+		cell.setCellValue("Marco");
+		FileOutputStream fs = new FileOutputStream("src/test/resources/termostato.xls");
+		wb.write(fs);
+		fs.close();
 	}
 
 	public void setTemperatura(int temp, int giorno, int dalle, int alle) {
