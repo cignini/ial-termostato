@@ -1,4 +1,4 @@
-package it.ial.termostato;
+package it.ial.termostato.core;
 
 public abstract class Cella {
 

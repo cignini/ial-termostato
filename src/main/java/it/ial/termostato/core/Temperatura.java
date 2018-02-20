@@ -1,4 +1,4 @@
-package it.ial.termostato;
+package it.ial.termostato.core;
 
 public class Temperatura extends Cella {
 
@@ -24,11 +24,15 @@ public class Temperatura extends Cella {
 		}
 	}
 
-	public Temperatura plus(Temperatura temp) {
-		return new Temperatura(this.gradi + temp.gradi);
+	public void incrementa(int numero) {
+		setGradi(gradi + numero);
 	}
 
-	public Temperatura div(int numero) {
-		return new Temperatura(gradi / numero);
+	public void decrementa(int numero) {
+		setGradi(gradi - numero);
+	}
+
+	public void div(int numero) {
+		setGradi(gradi / numero);
 	}
 }

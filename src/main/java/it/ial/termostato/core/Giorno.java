@@ -1,4 +1,4 @@
-package it.ial.termostato;
+package it.ial.termostato.core;
 
 public class Giorno extends Cella {
 
@@ -13,12 +13,12 @@ public class Giorno extends Cella {
 		}
 	}
 
-	public Temperatura getTempMedia() {
-		Temperatura media = new Temperatura(0);
+	public int getTempMedia() {
+		int media = 0;
 		for (Temperatura t : temperature) {
-			media = media.plus(t);
+			media += t.getGradi();
 		}
-		return media.div(temperature.length);
+		return media / temperature.length;
 	}
 
 	public int getGiornoDellaSettimana() {

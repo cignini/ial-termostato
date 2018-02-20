@@ -1,4 +1,4 @@
-package it.ial.termostato;
+package it.ial.termostato.core;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +31,14 @@ public class Termostato {
 		this.tempMin = new Temperatura(tempMin);
 		this.tempMax = new Temperatura(tempMax);
 		azzera();
+	}
+
+	public Giorno[] getGiorni() {
+		return giorni;
+	}
+
+	public Ora[] getOre() {
+		return ore;
 	}
 
 	public void esportaInExcel() throws IOException {
@@ -86,7 +94,7 @@ public class Termostato {
 	}
 
 	public void azzera() {
-		int gradi = tempMin.plus(tempMax).div(2).getGradi();
+		int gradi = (tempMax.getGradi() + tempMin.getGradi()) / 2;
 		for (int giorno = 0; giorno < 7; giorno++) {
 			giorni[giorno] = new Giorno(giorno + 1, gradi);
 		}
@@ -115,12 +123,12 @@ public class Termostato {
 		return tempMax;
 	}
 
-	public Temperatura getTempMedia() {
-		Temperatura media = new Temperatura(0);
+	public int getTempMedia() {
+		int media = 0;
 		for (Giorno giorno : giorni) {
-			media = media.plus(giorno.getTempMedia());
+			media += giorno.getTempMedia();
 		}
-		return media.div(giorni.length);
+		return media / giorni.length;
 	}
 
 	public void stampa() {

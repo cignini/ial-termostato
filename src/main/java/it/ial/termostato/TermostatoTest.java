@@ -2,6 +2,8 @@ package it.ial.termostato;
 
 import java.io.IOException;
 
+import it.ial.termostato.core.Termostato;
+
 public class TermostatoTest {
 
 	public static void main(String[] args) throws IOException {
