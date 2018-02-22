@@ -29,13 +29,30 @@ public class Termostato {
 		this.tempMax = tempMax;
 		inizializza((tempMin + tempMax) / 2);
 	}
-	
+
 	public void esportaInExcel() throws IOException {
 		Workbook wb = new HSSFWorkbook();
 		Sheet sheet = wb.createSheet("termostato");
-	
-		
-		
+
+		for (int giorno = 0; giorno <= 7; giorno++) {
+			Row riga = sheet.createRow(giorno);
+			for (int ora = -1; ora <= 23; ora++) {
+				Cell cella = riga.createCell(ora + 1);
+				if (ora == -1) {
+					// prima colonna
+					cella.setCellValue(toGiorno(giorno));
+				} else {
+					if (giorno == 0) {
+						// prima riga
+						cella.setCellValue(toHour(ora));
+					} else {
+						// righe interne
+						cella.setCellValue(toTemp(griglia[giorno - 1][ora]));
+					}
+				}
+			}
+		}
+
 		FileOutputStream fs = new FileOutputStream("src/test/resources/termostato.xls");
 		wb.write(fs);
 		fs.close();
