@@ -5,9 +5,8 @@ import java.io.IOException;
 public class TermostatoTest {
 
 	public static void main(String[] args) throws IOException {
-		Termostato termostato = new Termostato(18, 30);
-		termostato.setTemperatura(22, 2, 18, 22);
-		termostato.setTemperatura(20, 4, 15, 20);
+		Termostato termostato = new Termostato();
+		termostato.setFascia(Fascia.T3,GiornoDellaSettimana.LUN, 10, 18);
 		termostato.accendi();
 		termostato.stampa();
 		
