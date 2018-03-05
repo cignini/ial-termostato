@@ -31,6 +31,10 @@ public class Termostato {
 		fasce.put(Fascia.T2, 19);
 		fasce.put(Fascia.T3, 21);
 	}
+	
+	public List<FasceDelGiorno> getGriglia() {
+		return griglia;
+	}
 
 	public FasceDelGiorno getFasciaDelGiorno(GiornoDellaSettimana giorno) {
 		for (FasceDelGiorno fasceDelGiorno : griglia) {
