@@ -17,6 +17,15 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>8.6.0</version>
+				<configuration>
+					<vendor>IAL</vendor>
+					<mainClass>it.ial.termostato.gui.MainApp</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.7.0</version>
